@@ -21,6 +21,12 @@ discordClient.login(process.env.DISCORD_BOT_TOKEN);
 
 // Webhook Endpoint to receive Zoom events
 app.post("/webhook", async (req, res) => {
+  // Handle Zoom URL validation
+  if (req.body.plainToken) {
+    return res.json({ plainToken: req.body.plainToken });
+  }
+
+  // Handle actual Zoom webhook events
   if (!req.body.payload || !req.body.payload.object) {
     console.error("❌ Error: Missing payload or object in request.");
     return res.sendStatus(400);
