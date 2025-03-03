@@ -31,7 +31,7 @@ app.post("/webhook", async (req, res) => {
   ) {
     const encryptedToken = crypto
       .createHmac("sha256", process.env.ZOOM_WEBHOOK_SECRET_TOKEN)
-      .update(payload.plainToken)
+      .update(req.body.payload.plainToken)
       .digest("hex");
 
     return res.json({
