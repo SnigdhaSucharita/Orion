@@ -21,8 +21,11 @@ discordClient.login(process.env.DISCORD_BOT_TOKEN);
 
 // Webhook Endpoint to receive Zoom events
 app.post("/webhook", async (req, res) => {
+  console.log("🔍 Received webhook request:", req.body);
+
   // Handle Zoom URL validation
   if (req.body.plainToken) {
+    console.log("✅ Validation request received. Responding with plainToken.");
     return res.json({ plainToken: req.body.plainToken });
   }
 
