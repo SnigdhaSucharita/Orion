@@ -24,9 +24,12 @@ app.post("/webhook", async (req, res) => {
   console.log("🔍 Received webhook request:", req.body);
 
   // Handle Zoom URL validation
-  if (req.body.plainToken) {
+  if (
+    req.body.event === "endpoint.url_validation" &&
+    req.body.payload?.plainToken
+  ) {
     console.log("✅ Validation request received. Responding with plainToken.");
-    return res.json({ plainToken: req.body.plainToken });
+    return res.json({ plainToken: req.body.payload.plainToken });
   }
 
   // Handle actual Zoom webhook events
