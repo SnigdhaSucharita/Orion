@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const { Client, GatewayIntentBits } = require("discord.js");
 const axios = require("axios");
+const crypto = require("crypto");
 const { participant: participantModel } = require("./models");
 const { sequelize } = require("./models");
 
@@ -28,9 +29,15 @@ app.post("/webhook", async (req, res) => {
     req.body.event === "endpoint.url_validation" &&
     req.body.payload?.plainToken
   ) {
-    console.log("✅ Validation request received. Responding with plainToken.");
-    res.setHeader("Content-Type", "application/json");
-    return res.status(200).json({ plainToken: req.body.payload.plainToken });
+    const encryptedToken = crypto
+      .createHmac("sha256", process.env.ZOOM_WEBHOOK_SECRET_TOKEN)
+      .update(payload.plainToken)
+      .digest("hex");
+
+    return res.json({
+      plainToken: req.body.payload.plainToken,
+      encryptedToken: encryptedToken,
+    });
   }
 
   // Handle actual Zoom webhook events
