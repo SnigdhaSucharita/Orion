@@ -8,6 +8,14 @@ const { sequelize } = require("./models");
 const app = express();
 app.use(express.json());
 
+console.log("DB_USER:", process.env.DB_USER);
+console.log("DB_HOST:", process.env.DB_HOST);
+console.log("DB_NAME:", process.env.DB_NAME);
+console.log(
+  "DISCORD_BOT_TOKEN:",
+  process.env.DISCORD_BOT_TOKEN ? "Loaded" : "Missing"
+);
+
 // Initialize Discord Bot
 const discordClient = new Client({
   intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages],
